@@ -1,4 +1,54 @@
-- name: Create Database
-  run: |
-    mysql -u root -proot_password -e "CREATE DATABASE IF NOT EXISTS test_db;"
+name: MySQL CI/CD Pipeline
 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout repository
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Step 2: Set up MySQL
+    - name: Set up MySQL
+      uses: mirromutth/mysql-action@v1.3
+      with:
+        mysql-version: '8.0'
+        mysql-root-password: root_password
+        mysql-database: test_db
+
+    # Step 3: Create tables and load data
+    - name: Create Tables
+      run: |
+        mysql -u root -proot_password test_db < sql-scripts/create_tables.sql
+
+    # Step 4: Run the ETL procedure
+    - name: Run ETL Procedure
+      run: |
+        mysql -u root -proot_password test_db < sql-scripts/etl_region_sales.sql
+
+    # Step 5: Run Tests
+    - name: Run Tests
+      run: |
+        mysql -u root -proot_password test_db < tests/test_data_integrity.sql
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Deploy to Production
+      env:
+        MYSQL_HOST: ${{ secrets.PROD_MYSQL_HOST }}
+        MYSQL_USER: ${{ secrets.PROD_MYSQL_USER }}
+        MYSQL_PASSWORD: ${{ secrets.PROD_MYSQL_PASSWORD }}
+      run: |
+        mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD production_db < sql-scripts/etl_region_sales.sql
