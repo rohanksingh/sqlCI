@@ -23,9 +23,10 @@ jobs:
         mysql-database: test_db
 
     # Step 3: Create tables and load data
-    - name: Create Tables
+    - name: Create Tables and Populate Data
       run: |
-        mysql -u root -proot_password test_db < sql-scripts/create_tables.sql
+        mysql -u root -proot_password sales_db < sql-scripts/create_tables.sql
+
 
     # Step 4: Run the ETL procedure
     - name: Run ETL Procedure
