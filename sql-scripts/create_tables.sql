@@ -5,14 +5,14 @@ use sales_db;
 
 -- STEP 1 : sql Scripts
 
-create table orders (
+create table if not exists orders (
 order_id int primary key,
 customer_id int,
 order_date Date,
 amount decimal(10,2)
 );
 
-create table customer (
+create table  if not exists customer (
 customer_id int primary key ,
 customer_name varchar(100),
 region varchar(50)
