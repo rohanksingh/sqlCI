@@ -55,6 +55,7 @@ jobs:
       run: |
         mysql -h 127.0.0.1 -P 3306 -u root -psUmitra#12 sales_db < sql-scripts/test_data_integrity.sql
 
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -69,4 +70,4 @@ jobs:
         MYSQL_USER: ${{ secrets.PROD_MYSQL_USER }}
         MYSQL_PASSWORD: ${{ secrets.PROD_MYSQL_PASSWORD }}
       run: |
-        mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD production_db < sql-scripts/etl_region_sales.sql
+        mysql -h $MYSQL_HOST -u $MYSQL_USER -p"$MYSQL_PASSWORD" production_db < sql-scripts/etl_region_sales.sql
