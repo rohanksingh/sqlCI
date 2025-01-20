@@ -1,3 +1,4 @@
-    - name: Test MySQL Connection
-      run: |
-       mysql -h $MYSQL_HOST -u $MYSQL_USER -p"$MYSQL_PASSWORD" -e "SHOW DATABASES;"
+ - name: Test MySQL Connection
+   run: |
+    mysql -h $MYSQL_HOST -u $MYSQL_USER -p"$MYSQL_PASSWORD" -e "SHOW DATABASES;"
+
