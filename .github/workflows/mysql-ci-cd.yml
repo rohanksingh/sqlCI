@@ -9,34 +9,51 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: sUmitra#12
+          MYSQL_DATABASE: sales_db
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
     # Step 1: Checkout repository
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # Step 2: Set up MySQL
-    - name: Set up MySQL
-      uses: mirromutth/mysql-action@v1.3
-      with:
-        mysql-version: '8.0'
-        mysql-root-password: sUmitra#12  
-        mysql-database:  sales_db  
+    # Step 2: Wait for MySQL to be ready
+    - name: Wait for MySQL
+      run: |
+        for i in {1..30}; do
+          if mysql -h 127.0.0.1 -P 3306 -u root -psUmitra#12 -e "SELECT 1;" > /dev/null 2>&1; then
+            echo "MySQL is ready."
+            break
+          fi
+          echo "Waiting for MySQL..."
+          sleep 2
+        done
 
-    # Step 3: Create tables and load data
+    # Step 3: Create Tables and Load Data
     - name: Create Tables and Populate Data
       run: |
-        mysql -u root -proot_password sales_db < sql-scripts/create_tables.sql
+        mysql -h 127.0.0.1 -P 3306 -u root -psUmitra#12 sales_db < sql-scripts/create_tables.sql
 
-
-    # Step 4: Run the ETL procedure
+    # Step 4: Run the ETL Procedure
     - name: Run ETL Procedure
       run: |
-        mysql -u root -proot_password test_db < sql-scripts/etl_region_sales.sql
+        mysql -h 127.0.0.1 -P 3306 -u root -psUmitra#12 sales_db < sql-scripts/etl_region_sales.sql
 
     # Step 5: Run Tests
     - name: Run Tests
       run: |
-        mysql -u root -proot_password test_db < tests/test_data_integrity.sql
+        mysql -h 127.0.0.1 -P 3306 -u root -psUmitra#12 sales_db < sql-scripts/test_data_integrity.sql
 
   deploy:
     runs-on: ubuntu-latest
