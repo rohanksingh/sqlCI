@@ -1,1 +1,4 @@
+- name: Create Database
+  run: |
+    mysql -u root -proot_password -e "CREATE DATABASE IF NOT EXISTS test_db;"
 
