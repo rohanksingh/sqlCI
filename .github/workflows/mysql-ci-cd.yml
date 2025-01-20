@@ -32,7 +32,7 @@ jobs:
     - name: Wait for MySQL
       run: |
         for i in {1..30}; do
-          if mysql -h 127.0.0.1 -P 3306 -u rohan -psUmitra#12 -e "SELECT 1;" > /dev/null 2>&1; then
+          if mysql -h 127.0.0.1 -P 3306 -u root -psUmitra#12 -e "SELECT 1;" > /dev/null 2>&1; then
             echo "MySQL is ready."
             break
           fi
@@ -43,17 +43,17 @@ jobs:
     # Step 3: Create Tables and Load Data
     - name: Create Tables and Populate Data
       run: |
-        mysql -h 127.0.0.1 -P 3306 -u rohan -psUmitra#12 sales_db < sql-scripts/create_tables.sql
+        mysql -h 127.0.0.1 -P 3306 -u root -psUmitra#12 sales_db < sql-scripts/create_tables.sql
 
     # Step 4: Run the ETL Procedure
     - name: Run ETL Procedure
       run: |
-        mysql -h 127.0.0.1 -P 3306 -u rohan -psUmitra#12 sales_db < sql-scripts/etl_region_sales.sql
+        mysql -h 127.0.0.1 -P 3306 -u root -psUmitra#12 sales_db < sql-scripts/etl_region_sales.sql
 
     # Step 5: Run Tests
     - name: Run Tests
       run: |
-        mysql -h 127.0.0.1 -P 3306 -u rohan -psUmitra#12 sales_db < sql-scripts/test_data_integrity.sql
+        mysql -h 127.0.0.1 -P 3306 -u root -psUmitra#12 sales_db < sql-scripts/test_data_integrity.sql
 
 
   deploy:
