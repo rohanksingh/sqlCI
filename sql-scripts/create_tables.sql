@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS sales_db;
+
 use sales_db;
 
 
@@ -37,7 +39,7 @@ insert into customer values (101, 'Alice', 'North'),
 							(107, 'roz' , 'West'),
 							(108, 'ros' , 'North');
                             
-create table region_sales (
+create table if not exists region_sales (
 region varchar(50),
 total_sales decimal (10, 2)
 );
@@ -57,7 +59,7 @@ c.region;
 
 -- Create target table 
 
-create table region_sales_summary (
+create table if not exists region_sales_summary (
 region varchar(50),
 total_sales decimal (10, 2)
 );
