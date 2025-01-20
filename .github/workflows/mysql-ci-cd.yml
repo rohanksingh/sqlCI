@@ -70,4 +70,4 @@ jobs:
         MYSQL_USER: ${{ secrets.PROD_MYSQL_USER }}
         MYSQL_PASSWORD: ${{ secrets.PROD_MYSQL_PASSWORD }}
       run: |
-        mysql -h 127.0.0.1 -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" production_db < sql-scripts/etl_region_sales.sql
+        mysql -h 127.0.0.1 -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" sales_db < sql-scripts/etl_region_sales.sql
