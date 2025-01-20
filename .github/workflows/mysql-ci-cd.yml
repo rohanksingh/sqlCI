@@ -19,8 +19,8 @@ jobs:
       uses: mirromutth/mysql-action@v1.3
       with:
         mysql-version: '8.0'
-        mysql-root-password: root_password
-        mysql-database: test_db
+        mysql-root-password: sUmitra#12  
+        mysql-database:  sales_db  
 
     # Step 3: Create tables and load data
     - name: Create Tables and Populate Data
